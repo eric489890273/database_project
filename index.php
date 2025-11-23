@@ -79,6 +79,9 @@ require_once 'config.php';
                     <p>目前沒有展覽資訊</p>
                 <?php endif; ?>
             </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="exhibition_list.php" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;">查看更多展覽 →</a>
+            </div>
         </div>
 
         <!-- 系統特色 -->

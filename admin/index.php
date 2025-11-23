@@ -103,17 +103,14 @@ $recent_tickets = $conn->query($sql);
         <div class="card">
             <h2 class="card-title">⚡ 快速功能</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                <a href="exhibition_manage.php?action=add" class="btn btn-primary" style="padding: 1.5rem; font-size: 1.1rem;">
-                    ➕ 新增展覽
+                <a href="exhibition_manage.php" class="btn btn-primary" style="padding: 1.5rem; font-size: 1.1rem;">
+                    🎨 展覽管理
                 </a>
-                <a href="artifact_manage.php?action=add" class="btn btn-success" style="padding: 1.5rem; font-size: 1.1rem;">
-                    🖼️ 新增藝術品
-                </a>
-                <a href="exhibition_manage.php" class="btn btn-secondary" style="padding: 1.5rem; font-size: 1.1rem;">
-                    📋 查看展覽
+                <a href="artifact_manage.php" class="btn btn-success" style="padding: 1.5rem; font-size: 1.1rem;">
+                    🖼️ 藝術品管理
                 </a>
                 <a href="member_manage.php" class="btn btn-secondary" style="padding: 1.5rem; font-size: 1.1rem;">
-                    👥 查看會員
+                    👥 會員管理
                 </a>
             </div>
         </div>
