@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-11-22 09:38:42
+-- 產生時間： 2025-11-26 06:57:52
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -29,25 +29,24 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `artifact` (
   `art_id` varchar(10) NOT NULL,
-  `art_name` varchar(200) NOT NULL,
-  `e_name` varchar(200) NOT NULL
+  `art_name` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 傾印資料表的資料 `artifact`
 --
 
-INSERT INTO `artifact` (`art_id`, `art_name`, `e_name`) VALUES
-('ART001', '睡蓮', '印象派大師展'),
-('ART002', '日出印象', '印象派大師展'),
-('ART003', '星夜', '印象派大師展'),
-('ART004', '抽象構成', '現代藝術特展'),
-('ART005', '紅色方塊', '現代藝術特展'),
-('ART006', '流動空間', '現代藝術特展'),
-('ART007', '山水意境', '東方美學展覽'),
-('ART008', '水墨荷花', '東方美學展覽'),
-('ART009', '竹林深處', '東方美學展覽'),
-('ART010', '青銅器皿', '雕塑藝術展');
+INSERT INTO `artifact` (`art_id`, `art_name`) VALUES
+('ART001', '睡蓮'),
+('ART002', '日出印象'),
+('ART003', '星夜'),
+('ART004', '抽象構成'),
+('ART005', '紅色方塊'),
+('ART006', '流動空間'),
+('ART007', '山水意境'),
+('ART008', '水墨荷花'),
+('ART009', '竹林深處'),
+('ART010', '青銅器皿');
 
 -- --------------------------------------------------------
 
@@ -203,18 +202,17 @@ INSERT INTO `feedback` (`id`, `fb_id`, `content`) VALUES
 
 CREATE TABLE `guide` (
   `id` varchar(10) NOT NULL,
-  `g_id` varchar(10) NOT NULL,
-  `e_name` varchar(200) NOT NULL
+  `g_id` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 傾印資料表的資料 `guide`
 --
 
-INSERT INTO `guide` (`id`, `g_id`, `e_name`) VALUES
-('P008', 'G001', '印象派大師展'),
-('P009', 'G002', '現代藝術特展'),
-('P010', 'G003', '東方美學展覽');
+INSERT INTO `guide` (`id`, `g_id`) VALUES
+('P008', 'G001'),
+('P009', 'G002'),
+('P010', 'G003');
 
 -- --------------------------------------------------------
 
@@ -370,8 +368,7 @@ INSERT INTO `visitor` (`id`, `v_id`) VALUES
 -- 資料表索引 `artifact`
 --
 ALTER TABLE `artifact`
-  ADD PRIMARY KEY (`art_id`),
-  ADD KEY `artifact_ibfk_1` (`e_name`);
+  ADD PRIMARY KEY (`art_id`);
 
 --
 -- 資料表索引 `create`
@@ -416,8 +413,7 @@ ALTER TABLE `feedback`
 -- 資料表索引 `guide`
 --
 ALTER TABLE `guide`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `guide_ibfk_2` (`e_name`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- 資料表索引 `guided`
@@ -455,12 +451,6 @@ ALTER TABLE `visitor`
 --
 -- 已傾印資料表的限制式
 --
-
---
--- 資料表的限制式 `artifact`
---
-ALTER TABLE `artifact`
-  ADD CONSTRAINT `artifact_ibfk_1` FOREIGN KEY (`e_name`) REFERENCES `exhibition` (`e_name`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 資料表的限制式 `create`
@@ -504,8 +494,7 @@ ALTER TABLE `feedback`
 -- 資料表的限制式 `guide`
 --
 ALTER TABLE `guide`
-  ADD CONSTRAINT `guide_ibfk_1` FOREIGN KEY (`id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `guide_ibfk_2` FOREIGN KEY (`e_name`) REFERENCES `exhibition` (`e_name`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `guide_ibfk_1` FOREIGN KEY (`id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 資料表的限制式 `guided`

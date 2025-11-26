@@ -48,7 +48,7 @@ require_once 'config.php';
             <div class="exhibition-grid">
                 <?php
                 $sql = "SELECT e.e_name, e.e_Date, p.name as curator_name,
-                        (SELECT COUNT(*) FROM artifact WHERE e_name = e.e_name) as artifact_count
+                        (SELECT COUNT(*) FROM exhibit WHERE e_name = e.e_name) as artifact_count
                         FROM exhibition e
                         LEFT JOIN curator c ON e.id = c.id
                         LEFT JOIN person p ON c.id = p.id

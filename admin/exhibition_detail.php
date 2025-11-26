@@ -35,22 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_exhibition'])) 
                     throw new Exception("展覽名稱已存在!");
                 }
 
-                // 更新相關表
-                $sql = "UPDATE artifact SET e_name = ? WHERE e_name = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ss", $new_e_name, $e_name);
-                $stmt->execute();
-
+                // 更新 exhibit 表
                 $sql = "UPDATE exhibit SET e_name = ? WHERE e_name = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss", $new_e_name, $e_name);
                 $stmt->execute();
 
+                // 更新 guided 表
                 $sql = "UPDATE guided SET e_name = ? WHERE e_name = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss", $new_e_name, $e_name);
                 $stmt->execute();
 
+                // 更新 visit 表
                 $sql = "UPDATE visit SET e_name = ? WHERE e_name = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss", $new_e_name, $e_name);
@@ -95,10 +92,11 @@ if (!$exhibition) {
 // 查詢展覽的藝術品
 $sql = "SELECT a.art_id, a.art_name, GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') as creators
         FROM artifact a
+        INNER JOIN exhibit ex ON a.art_id = ex.art_id
         LEFT JOIN `create` c ON a.art_id = c.art_id
         LEFT JOIN creator cr ON c.id = cr.id
         LEFT JOIN person p ON cr.id = p.id
-        WHERE a.e_name = ?
+        WHERE ex.e_name = ?
         GROUP BY a.art_id, a.art_name
         ORDER BY a.art_id";
 $stmt = $conn->prepare($sql);
@@ -123,7 +121,7 @@ $visits = $stmt->get_result();
 $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p ON c.id = p.id ORDER BY p.name");
 
 // 統計資料
-$sql = "SELECT COUNT(*) as total FROM artifact WHERE e_name = ?";
+$sql = "SELECT COUNT(*) as total FROM exhibit WHERE e_name = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $e_name);
 $stmt->execute();

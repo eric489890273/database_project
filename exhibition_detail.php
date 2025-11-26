@@ -27,10 +27,11 @@ if (!$exhibition) {
 // 查詢展覽的藝術品
 $sql = "SELECT a.art_id, a.art_name, GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') as creators
         FROM artifact a
+        INNER JOIN exhibit ex ON a.art_id = ex.art_id
         LEFT JOIN `create` cr ON a.art_id = cr.art_id
         LEFT JOIN creator c ON cr.id = c.id
         LEFT JOIN person p ON c.id = p.id
-        WHERE a.e_name = ?
+        WHERE ex.e_name = ?
         GROUP BY a.art_id, a.art_name";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $exhibition_name);
@@ -40,8 +41,9 @@ $artifacts = $stmt->get_result();
 // 查詢導覽員
 $sql = "SELECT p.name, p.phone
         FROM guide g
+        INNER JOIN guided gd ON g.id = gd.id
         LEFT JOIN person p ON g.id = p.id
-        WHERE g.e_name = ?";
+        WHERE gd.e_name = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $exhibition_name);
 $stmt->execute();

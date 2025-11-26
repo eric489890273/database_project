@@ -32,15 +32,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_artifact'])) {
         $conn->begin_transaction();
 
         try {
-            $sql = "UPDATE artifact SET art_name = ?, e_name = ? WHERE art_id = ?";
+            // 更新藝術品名稱
+            $sql = "UPDATE artifact SET art_name = ? WHERE art_id = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $art_name, $e_name, $art_id);
+            $stmt->bind_param("ss", $art_name, $art_id);
             $stmt->execute();
 
-            // 更新 exhibit 表
-            $sql = "UPDATE exhibit SET e_name = ? WHERE art_id = ?";
+            // 更新 exhibit 表（先刪除舊的，再插入新的）
+            $sql = "DELETE FROM exhibit WHERE art_id = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $e_name, $art_id);
+            $stmt->bind_param("s", $art_id);
+            $stmt->execute();
+
+            $sql = "INSERT INTO exhibit (art_id, e_name) VALUES (?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $art_id, $e_name);
             $stmt->execute();
 
             // 處理創作者更新
@@ -113,9 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_artifact'])) {
 
         try {
             // 插入藝術品
-            $sql = "INSERT INTO artifact (art_id, art_name, e_name) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO artifact (art_id, art_name) VALUES (?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $art_id, $art_name, $e_name);
+            $stmt->bind_param("ss", $art_id, $art_name);
             $stmt->execute();
 
             // 插入展出關聯
@@ -188,7 +194,7 @@ if (!empty($search_value)) {
             $where_clause .= " AND a.art_name LIKE '%" . $conn->real_escape_string($search_value) . "%'";
             break;
         case 'exhibition':
-            $where_clause .= " AND a.e_name LIKE '%" . $conn->real_escape_string($search_value) . "%'";
+            $where_clause .= " AND ex.e_name LIKE '%" . $conn->real_escape_string($search_value) . "%'";
             break;
         case 'creator':
             $where_clause .= " AND p.name LIKE '%" . $conn->real_escape_string($search_value) . "%'";
@@ -197,15 +203,16 @@ if (!empty($search_value)) {
 }
 
 // 查詢藝術品
-$sql = "SELECT a.art_id, a.art_name, a.e_name, e.e_Date,
+$sql = "SELECT a.art_id, a.art_name, ex.e_name, e.e_Date,
         GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') as creators
         FROM artifact a
-        LEFT JOIN exhibition e ON a.e_name = e.e_name
+        LEFT JOIN exhibit ex ON a.art_id = ex.art_id
+        LEFT JOIN exhibition e ON ex.e_name = e.e_name
         LEFT JOIN `create` c ON a.art_id = c.art_id
         LEFT JOIN creator cr ON c.id = cr.id
         LEFT JOIN person p ON cr.id = p.id
         $where_clause
-        GROUP BY a.art_id, a.art_name, a.e_name, e.e_Date
+        GROUP BY a.art_id, a.art_name, ex.e_name, e.e_Date
         ORDER BY a.art_id DESC";
 $artifacts = $conn->query($sql);
 
