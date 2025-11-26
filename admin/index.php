@@ -67,32 +67,32 @@ $recent_tickets = $conn->query($sql);
     </nav>
 
     <div class="container">
-        <div class="hero" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-            <h1 style="color: white; background: none; -webkit-text-fill-color: white;">歡迎，<?php echo htmlspecialchars($user['name']); ?></h1>
-            <p style="color: rgba(255,255,255,0.9);">策展人管理後台</p>
+        <div class="hero" style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; border: 2px solid #8b7355;">
+            <h1 style="color: #f5f0e8; background: none; -webkit-text-fill-color: #f5f0e8;">歡迎，<?php echo htmlspecialchars($user['name']); ?></h1>
+            <p style="color: rgba(245,240,232,0.9);">策展人管理後台</p>
         </div>
 
         <!-- 統計卡片 -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-            <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <div class="card" style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; border: 1px solid #8b7355;">
                 <div style="font-size: 3rem; text-align: center;">🎨</div>
                 <h3 style="text-align: center; margin: 1rem 0; font-size: 2.5rem;"><?php echo $exhibition_count; ?></h3>
                 <p style="text-align: center; font-size: 1.2rem;">展覽總數</p>
             </div>
 
-            <div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+            <div class="card" style="background: linear-gradient(135deg, #7a5a4a 0%, #a87a6a 100%); color: #f5f0e8; border: 1px solid #a87a6a;">
                 <div style="font-size: 3rem; text-align: center;">🖼️</div>
                 <h3 style="text-align: center; margin: 1rem 0; font-size: 2.5rem;"><?php echo $artifact_count; ?></h3>
                 <p style="text-align: center; font-size: 1.2rem;">藝術品總數</p>
             </div>
 
-            <div class="card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+            <div class="card" style="background: linear-gradient(135deg, #5a6a5a 0%, #7a8a7a 100%); color: #f5f0e8; border: 1px solid #7a8a7a;">
                 <div style="font-size: 3rem; text-align: center;">👥</div>
                 <h3 style="text-align: center; margin: 1rem 0; font-size: 2.5rem;"><?php echo $visitor_count; ?></h3>
                 <p style="text-align: center; font-size: 1.2rem;">會員總數</p>
             </div>
 
-            <div class="card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
+            <div class="card" style="background: linear-gradient(135deg, #6a5a4a 0%, #9a8a7a 100%); color: #f5f0e8; border: 1px solid #9a8a7a;">
                 <div style="font-size: 3rem; text-align: center;">🎫</div>
                 <h3 style="text-align: center; margin: 1rem 0; font-size: 2.5rem;"><?php echo $ticket_count; ?></h3>
                 <p style="text-align: center; font-size: 1.2rem;">售出票券</p>

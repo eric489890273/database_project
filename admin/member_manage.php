@@ -99,18 +99,19 @@ $total_members = $conn->query($total_sql)->fetch_assoc()['total'];
             display: none;
             margin-top: 1rem;
             padding: 1rem;
-            background: #fff;
-            border-radius: 5px;
-            border: 2px solid #667eea;
+            background: #fffef9;
+            border-radius: 3px;
+            border: 2px solid #8b7355;
         }
         .edit-form.active {
             display: block;
         }
         .search-form {
-            background: #f8f9fa;
+            background: #f5f0e8;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 3px;
             margin-bottom: 1.5rem;
+            border: 1px solid #d4c4a8;
         }
     </style>
     <script>
@@ -157,7 +158,7 @@ $total_members = $conn->query($total_sql)->fetch_assoc()['total'];
 
             <!-- 搜尋表單 -->
             <div class="search-form">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">🔍 查詢會員</h3>
+                <h3 style="color: #5c4a32; margin-bottom: 1rem;">🔍 查詢會員</h3>
                 <form method="GET" action="">
                     <div style="display: grid; grid-template-columns: 200px 1fr auto; gap: 1rem; align-items: end;">
                         <div class="form-group" style="margin: 0;">
@@ -181,7 +182,7 @@ $total_members = $conn->query($total_sql)->fetch_assoc()['total'];
             </div>
 
             <?php if ($members && $members->num_rows > 0): ?>
-                <div style="margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
+                <div style="margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; border-radius: 3px;">
                     <h3 style="margin: 0;">
                         <?php if (!empty($search_value)): ?>
                             查詢結果：<?php echo $members->num_rows; ?> 人 (總會員數：<?php echo $total_members; ?> 人)
@@ -194,7 +195,7 @@ $total_members = $conn->query($total_sql)->fetch_assoc()['total'];
                 <div style="overflow-x: auto;">
                     <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
                         <!-- 表頭 -->
-                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.75rem;">
+                        <div style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; padding: 0.75rem;">
                             <div style="display: grid; grid-template-columns: 70px 100px 50px 100px 180px 90px 60px 60px 60px 140px; gap: 0.5rem; font-weight: bold; font-size: 0.9rem;">
                                 <div>會員編號</div>
                                 <div>姓名</div>
@@ -237,7 +238,7 @@ $total_members = $conn->query($total_sql)->fetch_assoc()['total'];
                                         <div id="edit-<?php echo $member['id']; ?>" class="edit-form">
                                                 <form method="POST">
                                                     <input type="hidden" name="member_id" value="<?php echo $member['id']; ?>">
-                                                    <h4 style="color: #667eea; margin-bottom: 1rem;">修改會員資料</h4>
+                                                    <h4 style="color: #5c4a32; margin-bottom: 1rem;">修改會員資料</h4>
                                                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
                                                         <div class="form-group">
                                                             <label>會員編號</label>
@@ -308,8 +309,8 @@ $total_members = $conn->query($total_sql)->fetch_assoc()['total'];
                 $gender_stats = $conn->query($sql);
                 ?>
 
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
-                    <h3 style="color: #667eea; margin-bottom: 1rem;">性別分布</h3>
+                <div style="background: #f5f0e8; padding: 1.5rem; border-radius: 3px; border: 1px solid #d4c4a8;">
+                    <h3 style="color: #5c4a32; margin-bottom: 1rem;">性別分布</h3>
                     <?php while($stat = $gender_stats->fetch_assoc()): ?>
                         <div style="margin-bottom: 0.5rem;">
                             <strong><?php echo htmlspecialchars($stat['gender']); ?>：</strong>
@@ -331,8 +332,8 @@ $total_members = $conn->query($total_sql)->fetch_assoc()['total'];
                 $age_stats = $conn->query($sql)->fetch_assoc();
                 ?>
 
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
-                    <h3 style="color: #667eea; margin-bottom: 1rem;">年齡分布</h3>
+                <div style="background: #f5f0e8; padding: 1.5rem; border-radius: 3px; border: 1px solid #d4c4a8;">
+                    <h3 style="color: #5c4a32; margin-bottom: 1rem;">年齡分布</h3>
                     <div style="margin-bottom: 0.5rem;"><strong>18歲以下：</strong><?php echo $age_stats['under_18']; ?> 人</div>
                     <div style="margin-bottom: 0.5rem;"><strong>18-30歲：</strong><?php echo $age_stats['age_18_30']; ?> 人</div>
                     <div style="margin-bottom: 0.5rem;"><strong>31-50歲：</strong><?php echo $age_stats['age_31_50']; ?> 人</div>
@@ -357,8 +358,8 @@ $total_members = $conn->query($total_sql)->fetch_assoc()['total'];
                 $activity_stats = $conn->query($sql)->fetch_assoc();
                 ?>
 
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
-                    <h3 style="color: #667eea; margin-bottom: 1rem;">活躍度統計</h3>
+                <div style="background: #f5f0e8; padding: 1.5rem; border-radius: 3px; border: 1px solid #d4c4a8;">
+                    <h3 style="color: #5c4a32; margin-bottom: 1rem;">活躍度統計</h3>
                     <div style="margin-bottom: 0.5rem;"><strong>已購票會員：</strong><?php echo $activity_stats['purchased']; ?> 人</div>
                     <div style="margin-bottom: 0.5rem;"><strong>有參觀記錄：</strong><?php echo $activity_stats['visited']; ?> 人</div>
                     <div style="margin-bottom: 0.5rem;"><strong>有回饋記錄：</strong><?php echo $activity_stats['feedbacked']; ?> 人</div>

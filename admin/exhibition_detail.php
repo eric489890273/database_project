@@ -142,11 +142,12 @@ $visit_count = $stmt->get_result()->fetch_assoc()['total'];
     <link rel="stylesheet" href="../css/style.css">
     <style>
         .info-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%);
+            color: #f5f0e8;
             padding: 2rem;
-            border-radius: 10px;
+            border-radius: 3px;
             margin-bottom: 2rem;
+            border: 2px solid #8b7355;
         }
         .info-grid {
             display: grid;
@@ -165,23 +166,24 @@ $visit_count = $stmt->get_result()->fetch_assoc()['total'];
             font-weight: bold;
         }
         .section-card {
-            background: white;
+            background: #fffef9;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 3px;
             margin-bottom: 1.5rem;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #d4c4a8;
         }
         .section-title {
-            color: #667eea;
+            color: #5c4a32;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #8b7355;
         }
         .edit-section {
-            background: #f8f9fa;
+            background: #f5f0e8;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 3px;
             margin-bottom: 2rem;
+            border: 1px solid #d4c4a8;
         }
     </style>
 </head>

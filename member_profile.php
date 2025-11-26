@@ -152,9 +152,9 @@ $feedbacks = $stmt->get_result();
             display: none;
             margin-top: 0.5rem;
             padding: 1rem;
-            background: #fff;
-            border-radius: 5px;
-            border: 2px solid #667eea;
+            background: #fffef9;
+            border-radius: 3px;
+            border: 2px solid #8b7355;
         }
         .edit-form.active {
             display: block;
@@ -245,10 +245,10 @@ $feedbacks = $stmt->get_result();
             <?php if ($tickets && $tickets->num_rows > 0): ?>
                 <div style="display: grid; gap: 1rem;">
                     <?php while($ticket = $tickets->fetch_assoc()): ?>
-                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="background: #f5f0e8; padding: 1rem; border-radius: 3px; border-left: 4px solid #8b7355;">
                             <div style="display: flex; justify-content: space-between; align-items: start;">
                                 <div>
-                                    <div style="font-weight: bold; color: #667eea;">票券編號: <?php echo htmlspecialchars($ticket['t_id']); ?></div>
+                                    <div style="font-weight: bold; color: #5c4a32;">票券編號: <?php echo htmlspecialchars($ticket['t_id']); ?></div>
                                     <div style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>NT$ <?php echo $ticket['price']; ?></strong></div>
                                 </div>
                                 <div class="action-buttons">
@@ -291,10 +291,10 @@ $feedbacks = $stmt->get_result();
             <?php if ($visits && $visits->num_rows > 0): ?>
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
                     <?php while($visit = $visits->fetch_assoc()): ?>
-                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; border-left: 4px solid #667eea;">
-                            <h3 style="color: #667eea; margin-bottom: 0.5rem;"><?php echo htmlspecialchars($visit['e_name']); ?></h3>
-                            <p style="color: #666; margin: 0;">📅 <?php echo date('Y年m月d日', strtotime($visit['e_Date'])); ?></p>
-                            <p style="color: #666; margin: 0;">👤 策展人: <?php echo htmlspecialchars($visit['curator_name']); ?></p>
+                        <div style="background: #f5f0e8; padding: 1rem; border-radius: 3px; border-left: 4px solid #8b7355;">
+                            <h3 style="color: #5c4a32; margin-bottom: 0.5rem;"><?php echo htmlspecialchars($visit['e_name']); ?></h3>
+                            <p style="color: #7a6a5a; margin: 0;">📅 <?php echo date('Y年m月d日', strtotime($visit['e_Date'])); ?></p>
+                            <p style="color: #7a6a5a; margin: 0;">👤 策展人: <?php echo htmlspecialchars($visit['curator_name']); ?></p>
                         </div>
                     <?php endwhile; ?>
                 </div>
@@ -309,7 +309,7 @@ $feedbacks = $stmt->get_result();
 
             <?php if ($feedbacks && $feedbacks->num_rows > 0): ?>
                 <?php while($feedback = $feedbacks->fetch_assoc()): ?>
-                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #667eea;">
+                    <div style="background: #f5f0e8; padding: 1rem; border-radius: 3px; margin-bottom: 1rem; border-left: 4px solid #8b7355;">
                         <div style="display: flex; justify-content: space-between; align-items: start;">
                             <div style="flex: 1;">
                                 <div style="color: #999; font-size: 0.9rem; margin-bottom: 0.5rem;">編號: <?php echo htmlspecialchars($feedback['fb_id']); ?></div>

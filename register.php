@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button type="submit" class="btn btn-primary" style="width: 100%;">註冊</button>
 
                 <p style="text-align: center; margin-top: 1rem;">
-                    已經有帳號？ <a href="login.php" style="color: #667eea;">立即登入</a>
+                    已經有帳號？ <a href="login.php" style="color: #5c4a32;">立即登入</a>
                 </p>
             </form>
         </div>

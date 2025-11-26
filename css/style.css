@@ -1,3 +1,10 @@
+/* ========================================
+   復古典雅博物館風格
+   ======================================== */
+
+/* Google Fonts 引入 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap');
+
 /* 全域樣式 */
 * {
     margin: 0;
@@ -6,20 +13,22 @@
 }
 
 body {
-    font-family: 'Microsoft JhengHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Noto Serif TC', 'Times New Roman', 'Microsoft JhengHei', serif;
+    font-weight: 700;
+    line-height: 1.8;
+    color: #3d3d3d;
+    background: #f5f0e8;
     min-height: 100vh;
 }
 
 /* 導航列 */
 .navbar {
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: #2c2416;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 3px solid #8b7355;
 }
 
 .navbar-container {
@@ -34,15 +43,16 @@ body {
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #667eea;
+    color: #d4c4a8;
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    letter-spacing: 2px;
 }
 
 .navbar-brand:hover {
-    color: #764ba2;
+    color: #f0e6d3;
 }
 
 .navbar-menu {
@@ -54,32 +64,34 @@ body {
 
 .navbar-menu a {
     text-decoration: none;
-    color: #333;
+    color: #d4c4a8;
     font-weight: 500;
     transition: color 0.3s;
     padding: 0.5rem 1rem;
-    border-radius: 5px;
+    border-radius: 3px;
+    letter-spacing: 1px;
 }
 
 .navbar-menu a:hover {
-    color: #667eea;
-    background: rgba(102, 126, 234, 0.1);
+    color: #f0e6d3;
+    background: rgba(139, 115, 85, 0.3);
 }
 
 .navbar-menu .btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: #8b7355;
+    color: #f5f0e8;
     padding: 0.5rem 1.5rem;
-    border-radius: 25px;
-    border: none;
+    border-radius: 3px;
+    border: 1px solid #a08b6d;
     cursor: pointer;
     font-weight: 600;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s;
+    letter-spacing: 1px;
 }
 
 .navbar-menu .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    background: #a08b6d;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* 主要容器 */
@@ -91,25 +103,26 @@ body {
 
 /* 卡片樣式 */
 .card {
-    background: white;
-    border-radius: 15px;
+    background: #fffef9;
+    border-radius: 3px;
     padding: 2rem;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
     margin-bottom: 2rem;
-    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #d4c4a8;
+    transition: box-shadow 0.3s;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.12);
 }
 
 .card-title {
     font-size: 1.8rem;
-    color: #667eea;
+    color: #5c4a32;
     margin-bottom: 1rem;
-    border-bottom: 3px solid #667eea;
+    border-bottom: 2px solid #8b7355;
     padding-bottom: 0.5rem;
+    letter-spacing: 2px;
 }
 
 /* 表單樣式 */
@@ -120,33 +133,37 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #555;
+    color: #5c4a32;
     font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .form-control {
     width: 100%;
     padding: 0.75rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
+    border: 1px solid #c4b69c;
+    border-radius: 3px;
     font-size: 1rem;
     transition: border-color 0.3s;
+    background: #fffef9;
+    font-family: inherit;
 }
 
 .form-control:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #8b7355;
+    box-shadow: 0 0 0 2px rgba(139, 115, 85, 0.2);
 }
 
 .form-control.error {
-    border-color: #e74c3c;
+    border-color: #a85246;
 }
 
 /* 按鈕樣式 */
 .btn {
     padding: 0.75rem 2rem;
-    border: none;
-    border-radius: 25px;
+    border: 1px solid transparent;
+    border-radius: 3px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -154,43 +171,49 @@ body {
     text-decoration: none;
     display: inline-block;
     text-align: center;
+    letter-spacing: 1px;
+    font-family: inherit;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: #5c4a32;
+    color: #f5f0e8;
+    border-color: #5c4a32;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    background: #7a6348;
+    box-shadow: 0 3px 10px rgba(92, 74, 50, 0.3);
 }
 
 .btn-secondary {
-    background: #6c757d;
-    color: white;
+    background: #8b8b8b;
+    color: #fff;
+    border-color: #8b8b8b;
 }
 
 .btn-secondary:hover {
-    background: #5a6268;
+    background: #6e6e6e;
 }
 
 .btn-success {
-    background: #28a745;
-    color: white;
+    background: #5d7a5d;
+    color: #fff;
+    border-color: #5d7a5d;
 }
 
 .btn-success:hover {
-    background: #218838;
+    background: #4a6349;
 }
 
 .btn-danger {
-    background: #dc3545;
-    color: white;
+    background: #a85246;
+    color: #fff;
+    border-color: #a85246;
 }
 
 .btn-danger:hover {
-    background: #c82333;
+    background: #8b4339;
 }
 
 /* 展覽網格 */
@@ -202,27 +225,28 @@ body {
 }
 
 .exhibition-card {
-    background: white;
-    border-radius: 15px;
+    background: #fffef9;
+    border-radius: 3px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s;
+    border: 1px solid #d4c4a8;
 }
 
 .exhibition-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .exhibition-image {
     width: 100%;
     height: 200px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: #f5f0e8;
     font-size: 3rem;
+    border-bottom: 3px solid #8b7355;
 }
 
 .exhibition-content {
@@ -231,20 +255,22 @@ body {
 
 .exhibition-title {
     font-size: 1.3rem;
-    color: #333;
+    color: #3d3d3d;
     margin-bottom: 0.5rem;
+    letter-spacing: 1px;
 }
 
 .exhibition-date {
-    color: #777;
+    color: #7a6a5a;
     font-size: 0.9rem;
     margin-bottom: 1rem;
 }
 
 .exhibition-curator {
-    color: #667eea;
+    color: #5c4a32;
     font-size: 0.9rem;
     margin-bottom: 1rem;
+    font-weight: 500;
 }
 
 /* 表格樣式 */
@@ -258,80 +284,95 @@ body {
 .table td {
     padding: 1rem;
     text-align: left;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #d4c4a8;
 }
 
 .table th {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: #5c4a32;
+    color: #f5f0e8;
     font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .table tr:hover {
-    background: rgba(102, 126, 234, 0.05);
+    background: rgba(139, 115, 85, 0.08);
 }
 
 /* 警告訊息 */
 .alert {
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 3px;
     margin-bottom: 1rem;
+    border-left: 4px solid;
 }
 
 .alert-success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background: #e8f0e8;
+    color: #3d5c3d;
+    border-left-color: #5d7a5d;
 }
 
 .alert-danger {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background: #f5e8e6;
+    color: #6b3a35;
+    border-left-color: #a85246;
 }
 
 .alert-info {
-    background: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
+    background: #e8f0f5;
+    color: #3a4f5c;
+    border-left-color: #5a7a8b;
 }
 
 /* 頁尾 */
 .footer {
-    background: rgba(255, 255, 255, 0.98);
+    background: #2c2416;
     padding: 2rem;
     text-align: center;
     margin-top: 3rem;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    border-top: 3px solid #8b7355;
 }
 
 .footer p {
-    color: #777;
+    color: #a08b6d;
+    letter-spacing: 1px;
 }
 
 /* 英雄區塊 */
 .hero {
-    background: white;
-    border-radius: 15px;
+    background: #fffef9;
+    border-radius: 3px;
     padding: 3rem;
     text-align: center;
     margin-bottom: 2rem;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid #d4c4a8;
+    position: relative;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8b7355, #5c4a32, #8b7355);
 }
 
 .hero h1 {
-    font-size: 3rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 2.5rem;
+    color: #5c4a32;
     margin-bottom: 1rem;
+    letter-spacing: 3px;
+    font-weight: 600;
 }
 
 .hero p {
     font-size: 1.2rem;
-    color: #666;
+    color: #7a6a5a;
     margin-bottom: 2rem;
+    letter-spacing: 2px;
 }
 
 /* 響應式設計 */
@@ -351,7 +392,7 @@ body {
     }
 
     .hero h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .container {
@@ -364,9 +405,9 @@ body {
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(92, 74, 50, 0.3);
     border-radius: 50%;
-    border-top-color: white;
+    border-top-color: #5c4a32;
     animation: spin 1s ease-in-out infinite;
 }
 
@@ -383,30 +424,30 @@ body {
 .badge {
     display: inline-block;
     padding: 0.25rem 0.75rem;
-    border-radius: 12px;
+    border-radius: 3px;
     font-size: 0.85rem;
     font-weight: 600;
 }
 
 .badge-primary {
-    background: #667eea;
-    color: white;
+    background: #5c4a32;
+    color: #f5f0e8;
 }
 
 .badge-success {
-    background: #28a745;
-    color: white;
+    background: #5d7a5d;
+    color: #fff;
 }
 
 .badge-warning {
-    background: #ffc107;
-    color: #333;
+    background: #c9a227;
+    color: #3d3d3d;
 }
 
 /* 輸入提示 */
 .form-text {
     font-size: 0.875rem;
-    color: #6c757d;
+    color: #7a6a5a;
     margin-top: 0.25rem;
 }
 
@@ -420,16 +461,62 @@ body {
 
 .pagination a {
     padding: 0.5rem 1rem;
-    background: white;
-    border-radius: 5px;
+    background: #fffef9;
+    border-radius: 3px;
     text-decoration: none;
-    color: #667eea;
-    border: 2px solid #667eea;
+    color: #5c4a32;
+    border: 1px solid #8b7355;
     transition: all 0.3s;
 }
 
 .pagination a:hover,
 .pagination a.active {
-    background: #667eea;
-    color: white;
+    background: #5c4a32;
+    color: #f5f0e8;
+}
+
+/* ========================================
+   復古裝飾元素
+   ======================================== */
+
+/* 分隔線裝飾 */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 2rem 0;
+    color: #8b7355;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #c4b69c;
+}
+
+.divider::before {
+    margin-right: 1rem;
+}
+
+.divider::after {
+    margin-left: 1rem;
+}
+
+/* 復古邊框裝飾 */
+.vintage-border {
+    border: 2px solid #8b7355;
+    padding: 1rem;
+    position: relative;
+}
+
+.vintage-border::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border: 1px solid #c4b69c;
+    pointer-events: none;
 }

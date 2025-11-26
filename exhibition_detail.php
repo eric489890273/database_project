@@ -91,7 +91,7 @@ $guides = $stmt->get_result();
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
                 <div>
-                    <h3 style="color: #667eea; margin-bottom: 1rem;">展覽資訊</h3>
+                    <h3 style="color: #5c4a32; margin-bottom: 1rem;">展覽資訊</h3>
                     <p><strong>展覽日期：</strong> <?php echo date('Y年m月d日', strtotime($exhibition['e_Date'])); ?></p>
                     <p><strong>策展人：</strong> <?php echo htmlspecialchars($exhibition['curator_name']); ?></p>
                     <p><strong>聯絡電話：</strong> <?php echo htmlspecialchars($exhibition['phone']); ?></p>
@@ -103,11 +103,11 @@ $guides = $stmt->get_result();
                 </div>
 
                 <div>
-                    <h3 style="color: #667eea; margin-bottom: 1rem;">導覽員</h3>
+                    <h3 style="color: #5c4a32; margin-bottom: 1rem;">導覽員</h3>
                     <?php if ($guides && $guides->num_rows > 0): ?>
                         <ul style="list-style: none; padding: 0;">
                             <?php while($guide = $guides->fetch_assoc()): ?>
-                                <li style="padding: 0.5rem; background: #f8f9fa; margin-bottom: 0.5rem; border-radius: 5px;">
+                                <li style="padding: 0.5rem; background: #f5f0e8; margin-bottom: 0.5rem; border-radius: 3px;">
                                     <strong><?php echo htmlspecialchars($guide['name']); ?></strong><br>
                                     📞 <?php echo htmlspecialchars($guide['phone']); ?>
                                 </li>

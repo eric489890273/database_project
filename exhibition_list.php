@@ -45,10 +45,11 @@ $total_exhibitions = $conn->query($total_sql)->fetch_assoc()['total'];
     <link rel="stylesheet" href="css/style.css">
     <style>
         .search-form {
-            background: #f8f9fa;
+            background: #f5f0e8;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 3px;
             margin-bottom: 1.5rem;
+            border: 1px solid #d4c4a8;
         }
     </style>
 </head>
@@ -83,7 +84,7 @@ $total_exhibitions = $conn->query($total_sql)->fetch_assoc()['total'];
 
             <!-- 搜尋表單 -->
             <div class="search-form">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">🔍 查詢展覽</h3>
+                <h3 style="color: #5c4a32; margin-bottom: 1rem;">🔍 查詢展覽</h3>
                 <form method="GET" action="">
                     <div style="display: grid; grid-template-columns: 200px 1fr auto; gap: 1rem; align-items: end;">
                         <div class="form-group" style="margin: 0;">
@@ -108,7 +109,7 @@ $total_exhibitions = $conn->query($total_sql)->fetch_assoc()['total'];
 
             <!-- 展覽統計 -->
             <?php if ($exhibitions && $exhibitions->num_rows > 0): ?>
-                <div style="margin-bottom: 1.5rem; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
+                <div style="margin-bottom: 1.5rem; padding: 1rem; background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; border-radius: 3px;">
                     <h3 style="margin: 0;">
                         <?php if (!empty($search_value)): ?>
                             查詢結果: <?php echo $exhibitions->num_rows; ?> 個展覽 (總展覽數: <?php echo $total_exhibitions; ?> 個)

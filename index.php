@@ -90,23 +90,23 @@ require_once 'config.php';
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
                 <div style="text-align: center; padding: 1.5rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">🎫</div>
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">線上購票</h3>
-                    <p style="color: #666;">輕鬆便捷的線上購票系統</p>
+                    <h3 style="color: #5c4a32; margin-bottom: 0.5rem;">線上購票</h3>
+                    <p style="color: #7a6a5a;">輕鬆便捷的線上購票系統</p>
                 </div>
                 <div style="text-align: center; padding: 1.5rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">🎨</div>
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">展覽管理</h3>
-                    <p style="color: #666;">完善的展覽資訊管理功能</p>
+                    <h3 style="color: #5c4a32; margin-bottom: 0.5rem;">展覽管理</h3>
+                    <p style="color: #7a6a5a;">完善的展覽資訊管理功能</p>
                 </div>
                 <div style="text-align: center; padding: 1.5rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">會員系統</h3>
-                    <p style="color: #666;">個人化的會員服務體驗</p>
+                    <h3 style="color: #5c4a32; margin-bottom: 0.5rem;">會員系統</h3>
+                    <p style="color: #7a6a5a;">個人化的會員服務體驗</p>
                 </div>
                 <div style="text-align: center; padding: 1.5rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">💬</div>
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">意見回饋</h3>
-                    <p style="color: #666;">即時的展覽意見反饋機制</p>
+                    <h3 style="color: #5c4a32; margin-bottom: 0.5rem;">意見回饋</h3>
+                    <p style="color: #7a6a5a;">即時的展覽意見反饋機制</p>
                 </div>
             </div>
         </div>
@@ -137,19 +137,19 @@ require_once 'config.php';
                 $today_exhibition = $result->fetch_assoc()['count'];
                 ?>
 
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; padding: 1.5rem; border-radius: 3px; text-align: center; border: 1px solid #8b7355;">
                     <div style="font-size: 2.5rem; font-weight: bold;"><?php echo $exhibition_count; ?></div>
                     <div>場展覽</div>
                 </div>
-                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #7a5a4a 0%, #a87a6a 100%); color: #f5f0e8; padding: 1.5rem; border-radius: 3px; text-align: center; border: 1px solid #a87a6a;">
                     <div style="font-size: 2.5rem; font-weight: bold;"><?php echo $artifact_count; ?></div>
                     <div>件藝術品</div>
                 </div>
-                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #5a6a5a 0%, #7a8a7a 100%); color: #f5f0e8; padding: 1.5rem; border-radius: 3px; text-align: center; border: 1px solid #7a8a7a;">
                     <div style="font-size: 2.5rem; font-weight: bold;"><?php echo $visitor_count; ?></div>
                     <div>位會員</div>
                 </div>
-                <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #6a5a4a 0%, #9a8a7a 100%); color: #f5f0e8; padding: 1.5rem; border-radius: 3px; text-align: center; border: 1px solid #9a8a7a;">
                     <div style="font-size: 2.5rem; font-weight: bold;"><?php echo $today_exhibition; ?></div>
                     <div>今日展覽</div>
                 </div>

@@ -96,9 +96,9 @@ $stats = $conn->query($sql)->fetch_assoc();
                 </form>
             <?php else: ?>
                 <div class="alert alert-info">
-                    請先 <a href="login.php" style="color: #667eea; font-weight: bold;">登入</a>
+                    請先 <a href="login.php" style="color: #5c4a32; font-weight: bold;">登入</a>
                     才能提交回饋。還不是會員？
-                    <a href="register.php" style="color: #667eea; font-weight: bold;">立即註冊</a>
+                    <a href="register.php" style="color: #5c4a32; font-weight: bold;">立即註冊</a>
                 </div>
             <?php endif; ?>
         </div>
@@ -107,11 +107,11 @@ $stats = $conn->query($sql)->fetch_assoc();
         <div class="card">
             <h2 class="card-title">📊 回饋統計</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; padding: 1.5rem; border-radius: 3px; text-align: center; border: 1px solid #8b7355;">
                     <div style="font-size: 2.5rem; font-weight: bold;"><?php echo $feedbacks->num_rows; ?></div>
                     <div>則回饋</div>
                 </div>
-                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #7a5a4a 0%, #a87a6a 100%); color: #f5f0e8; padding: 1.5rem; border-radius: 3px; text-align: center; border: 1px solid #a87a6a;">
                     <div style="font-size: 2.5rem; font-weight: bold;"><?php echo $stats['feedback_users']; ?></div>
                     <div>位用戶參與</div>
                 </div>
@@ -125,15 +125,15 @@ $stats = $conn->query($sql)->fetch_assoc();
             <?php if ($feedbacks && $feedbacks->num_rows > 0): ?>
                 <div style="display: grid; gap: 1rem; margin-top: 1rem;">
                     <?php while($feedback = $feedbacks->fetch_assoc()): ?>
-                        <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #667eea;">
+                        <div style="background: #f5f0e8; padding: 1.5rem; border-radius: 3px; border-left: 4px solid #8b7355;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                    <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); display: flex; align-items: center; justify-content: center; color: #f5f0e8; font-weight: bold;">
                                         <?php echo mb_substr($feedback['name'], 0, 1, 'UTF-8'); ?>
                                     </div>
                                     <div>
-                                        <strong style="color: #667eea; font-size: 1.1rem;"><?php echo htmlspecialchars($feedback['name']); ?></strong>
-                                        <div style="color: #999; font-size: 0.85rem;">編號: <?php echo htmlspecialchars($feedback['fb_id']); ?></div>
+                                        <strong style="color: #5c4a32; font-size: 1.1rem;"><?php echo htmlspecialchars($feedback['name']); ?></strong>
+                                        <div style="color: #7a6a5a; font-size: 0.85rem;">編號: <?php echo htmlspecialchars($feedback['fb_id']); ?></div>
                                     </div>
                                 </div>
                                 <?php if (isLoggedIn() && $_SESSION['user_id'] == $feedback['id']): ?>
@@ -158,22 +158,22 @@ $stats = $conn->query($sql)->fetch_assoc();
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
                 <div style="text-align: center; padding: 1rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">🎨</div>
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">展覽內容</h3>
+                    <h3 style="color: #5c4a32; margin-bottom: 0.5rem;">展覽內容</h3>
                     <p style="color: #666;">展覽品質、內容豐富度、藝術品呈現方式</p>
                 </div>
                 <div style="text-align: center; padding: 1rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">💻</div>
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">網站功能</h3>
+                    <h3 style="color: #5c4a32; margin-bottom: 0.5rem;">網站功能</h3>
                     <p style="color: #666;">介面設計、操作流暢度、功能完整性</p>
                 </div>
                 <div style="text-align: center; padding: 1rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">🎫</div>
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">購票體驗</h3>
+                    <h3 style="color: #5c4a32; margin-bottom: 0.5rem;">購票體驗</h3>
                     <p style="color: #666;">購票流程、價格合理性、票券選擇</p>
                 </div>
                 <div style="text-align: center; padding: 1rem;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">🤝</div>
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;">服務品質</h3>
+                    <h3 style="color: #5c4a32; margin-bottom: 0.5rem;">服務品質</h3>
                     <p style="color: #666;">客戶服務、導覽品質、整體滿意度</p>
                 </div>
             </div>

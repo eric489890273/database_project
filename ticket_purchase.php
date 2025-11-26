@@ -79,9 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button type="submit" class="btn btn-success" style="width: 100%;">確認購買</button>
             </form>
 
-            <div style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">📋 購票說明</h3>
-                <ul style="color: #666; line-height: 1.8;">
+            <div style="margin-top: 2rem; padding: 1rem; background: #f5f0e8; border-radius: 3px; border: 1px solid #d4c4a8;">
+                <h3 style="color: #5c4a32; margin-bottom: 1rem;">📋 購票說明</h3>
+                <ul style="color: #7a6a5a; line-height: 1.8;">
                     <li>全票：適用於一般成人</li>
                     <li>學生票：需出示有效學生證</li>
                     <li>優待票：適用於65歲以上長者及身心障礙人士</li>

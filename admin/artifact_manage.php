@@ -246,18 +246,19 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
             display: none;
             margin-top: 1rem;
             padding: 1rem;
-            background: #fff;
-            border-radius: 5px;
-            border: 2px solid #667eea;
+            background: #fffef9;
+            border-radius: 3px;
+            border: 2px solid #8b7355;
         }
         .edit-form.active {
             display: block;
         }
         .search-form {
-            background: #f8f9fa;
+            background: #f5f0e8;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 3px;
             margin-bottom: 1.5rem;
+            border: 1px solid #d4c4a8;
         }
         .creator-option {
             display: none;
@@ -330,7 +331,7 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
 
             <!-- 搜尋表單 -->
             <div class="search-form">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">🔍 查詢藝術品</h3>
+                <h3 style="color: #5c4a32; margin-bottom: 1rem;">🔍 查詢藝術品</h3>
                 <form method="GET" action="">
                     <div style="display: grid; grid-template-columns: 200px 1fr auto auto; gap: 1rem; align-items: end;">
                         <div class="form-group" style="margin: 0;">
@@ -356,7 +357,7 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
 
             <!-- 新增藝術品表單 -->
             <div id="add-form" class="edit-form" style="margin-bottom: 1.5rem;">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">新增藝術品</h3>
+                <h3 style="color: #5c4a32; margin-bottom: 1rem;">新增藝術品</h3>
                 <form method="POST">
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
                         <div class="form-group">
@@ -404,7 +405,7 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
 
                         <!-- 新增創作者 -->
                         <div id="creator-new" class="creator-option">
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; border: 2px solid #667eea; border-radius: 8px;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; border: 2px solid #5c4a32; border-radius: 3px;">
                                 <div class="form-group" style="margin: 0;">
                                     <label>姓名 *</label>
                                     <input type="text" name="new_creator_name" class="form-control">
@@ -442,7 +443,7 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
 
             <!-- 藝術品列表 -->
             <?php if ($artifacts && $artifacts->num_rows > 0): ?>
-                <div style="margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
+                <div style="margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; border-radius: 3px;">
                     <h3 style="margin: 0;">
                         <?php if (!empty($search_value)): ?>
                             查詢結果: <?php echo $artifacts->num_rows; ?> 件 (總藝術品數: <?php echo $total_artifacts; ?> 件)
@@ -455,7 +456,7 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
                 <div style="overflow-x: auto;">
                     <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
                         <!-- 表頭 -->
-                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.75rem;">
+                        <div style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; padding: 0.75rem;">
                             <div style="display: grid; grid-template-columns: 80px 200px 180px 100px 180px 140px; gap: 0.5rem; font-weight: bold; font-size: 0.9rem;">
                                 <div>編號</div>
                                 <div>藝術品名稱</div>
@@ -490,7 +491,7 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
                                         <div id="edit-<?php echo $art['art_id']; ?>" class="edit-form">
                                             <form method="POST">
                                                 <input type="hidden" name="art_id" value="<?php echo $art['art_id']; ?>">
-                                                <h4 style="color: #667eea; margin-bottom: 1rem;">修改藝術品資料</h4>
+                                                <h4 style="color: #5c4a32; margin-bottom: 1rem;">修改藝術品資料</h4>
                                                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
                                                     <div class="form-group">
                                                         <label>藝術品編號</label>
@@ -543,7 +544,7 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
 
                                                     <!-- 新增創作者 -->
                                                     <div id="creator-new-<?php echo $art['art_id']; ?>" class="creator-option">
-                                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; border: 2px solid #667eea; border-radius: 8px;">
+                                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; border: 2px solid #8b7355; border-radius: 3px;">
                                                             <div class="form-group" style="margin: 0;">
                                                                 <label>姓名 *</label>
                                                                 <input type="text" name="new_creator_name" class="form-control">

@@ -110,18 +110,19 @@ $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p 
             font-size: 0.85rem;
         }
         .search-form {
-            background: #f8f9fa;
+            background: #f5f0e8;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 3px;
             margin-bottom: 1.5rem;
+            border: 1px solid #d4c4a8;
         }
         .edit-form {
             display: none;
             margin-bottom: 1.5rem;
             padding: 1rem;
-            background: #fff;
-            border-radius: 5px;
-            border: 2px solid #667eea;
+            background: #fffef9;
+            border-radius: 3px;
+            border: 2px solid #8b7355;
         }
         .edit-form.active {
             display: block;
@@ -166,7 +167,7 @@ $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p 
 
             <!-- 搜尋表單 -->
             <div class="search-form">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">🔍 查詢展覽</h3>
+                <h3 style="color: #5c4a32; margin-bottom: 1rem;">🔍 查詢展覽</h3>
                 <form method="GET" action="">
                     <div style="display: grid; grid-template-columns: 200px 1fr auto auto; gap: 1rem; align-items: end;">
                         <div class="form-group" style="margin: 0;">
@@ -192,7 +193,7 @@ $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p 
 
             <!-- 新增展覽表單 -->
             <div id="add-form" class="edit-form">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">新增展覽</h3>
+                <h3 style="color: #5c4a32; margin-bottom: 1rem;">新增展覽</h3>
                 <form method="POST">
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
                         <div class="form-group">
@@ -213,7 +214,7 @@ $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p 
 
             <!-- 展覽列表 -->
             <?php if ($exhibitions && $exhibitions->num_rows > 0): ?>
-                <div style="margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
+                <div style="margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; border-radius: 3px;">
                     <h3 style="margin: 0;">
                         <?php if (!empty($search_value)): ?>
                             查詢結果: <?php echo $exhibitions->num_rows; ?> 個展覽 (總展覽數: <?php echo $total_exhibitions; ?> 個)
@@ -226,7 +227,7 @@ $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p 
                 <div style="overflow-x: auto;">
                     <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
                         <!-- 表頭 -->
-                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.75rem;">
+                        <div style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; padding: 0.75rem;">
                             <div style="display: grid; grid-template-columns: 200px 100px 120px 90px 90px 140px; gap: 0.5rem; font-weight: bold; font-size: 0.9rem;">
                                 <div>展覽名稱</div>
                                 <div>展覽日期</div>
