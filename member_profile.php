@@ -23,20 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_ticket'])) {
     }
 }
 
-// 處理修改票券
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_ticket'])) {
-    $ticket_id = $_POST['ticket_id'];
-    $new_price = intval($_POST['new_price']);
-    $sql = "UPDATE ticket SET price = ? WHERE t_id = ? AND id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iss", $new_price, $ticket_id, $_SESSION['user_id']);
-    if ($stmt->execute()) {
-        $message = '<div class="alert alert-success">票券已更新！</div>';
-    } else {
-        $message = '<div class="alert alert-danger">更新失敗！</div>';
-    }
-}
-
 // 處理刪除回饋
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_feedback'])) {
     $fb_id = $_POST['fb_id'];
@@ -246,34 +232,14 @@ $feedbacks = $stmt->get_result();
                 <div style="display: grid; gap: 1rem;">
                     <?php while($ticket = $tickets->fetch_assoc()): ?>
                         <div style="background: #f5f0e8; padding: 1rem; border-radius: 3px; border-left: 4px solid #8b7355;">
-                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div>
                                     <div style="font-weight: bold; color: #5c4a32;">票券編號: <?php echo htmlspecialchars($ticket['t_id']); ?></div>
                                     <div style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>NT$ <?php echo $ticket['price']; ?></strong></div>
                                 </div>
-                                <div class="action-buttons">
-                                    <button onclick="toggleEdit('ticket-<?php echo $ticket['t_id']; ?>')" class="btn btn-primary btn-small">修改</button>
-                                    <form method="POST" style="display: inline;" onsubmit="return confirmDelete('票券', '<?php echo $ticket['t_id']; ?>');">
-                                        <input type="hidden" name="ticket_id" value="<?php echo $ticket['t_id']; ?>">
-                                        <button type="submit" name="delete_ticket" class="btn btn-danger btn-small">取消購票</button>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div id="edit-ticket-<?php echo $ticket['t_id']; ?>" class="edit-form">
-                                <form method="POST">
+                                <form method="POST" onsubmit="return confirmDelete('票券', '<?php echo $ticket['t_id']; ?>');">
                                     <input type="hidden" name="ticket_id" value="<?php echo $ticket['t_id']; ?>">
-                                    <div class="form-group">
-                                        <label>修改票價</label>
-                                        <select name="new_price" class="form-control" required>
-                                            <option value="300" <?php echo $ticket['price'] == 300 ? 'selected' : ''; ?>>全票 - NT$ 300</option>
-                                            <option value="150" <?php echo $ticket['price'] == 150 ? 'selected' : ''; ?>>學生票 - NT$ 150</option>
-                                            <option value="200" <?php echo $ticket['price'] == 200 ? 'selected' : ''; ?>>優待票 - NT$ 200</option>
-                                            <option value="0" <?php echo $ticket['price'] == 0 ? 'selected' : ''; ?>>免費票 - NT$ 0</option>
-                                        </select>
-                                    </div>
-                                    <button type="submit" name="update_ticket" class="btn btn-success">確認修改</button>
-                                    <button type="button" onclick="toggleEdit('ticket-<?php echo $ticket['t_id']; ?>')" class="btn">取消</button>
+                                    <button type="submit" name="delete_ticket" class="btn btn-danger btn-small">取消購票</button>
                                 </form>
                             </div>
                         </div>
