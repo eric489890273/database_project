@@ -255,7 +255,7 @@ $feedbacks = $stmt->get_result();
                                     <button onclick="toggleEdit('ticket-<?php echo $ticket['t_id']; ?>')" class="btn btn-primary btn-small">修改</button>
                                     <form method="POST" style="display: inline;" onsubmit="return confirmDelete('票券', '<?php echo $ticket['t_id']; ?>');">
                                         <input type="hidden" name="ticket_id" value="<?php echo $ticket['t_id']; ?>">
-                                        <button type="submit" name="delete_ticket" class="btn btn-danger btn-small">刪除</button>
+                                        <button type="submit" name="delete_ticket" class="btn btn-danger btn-small">取消購票</button>
                                     </form>
                                 </div>
                             </div>

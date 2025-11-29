@@ -42,9 +42,9 @@ require_once 'config.php';
             <p>探索藝術、體驗文化、豐富生活</p>
         </div>
 
-        <!-- 所有展覽 -->
+        <!-- 最新展覽 -->
         <div class="card">
-            <h2 class="card-title">🎨 所有展覽</h2>
+            <h2 class="card-title">🎨 最新展覽</h2>
             <div class="exhibition-grid">
                 <?php
                 $sql = "SELECT e.e_name, e.e_Date, p.name as curator_name,
@@ -52,7 +52,8 @@ require_once 'config.php';
                         FROM exhibition e
                         LEFT JOIN curator c ON e.id = c.id
                         LEFT JOIN person p ON c.id = p.id
-                        ORDER BY e.e_Date DESC";
+                        ORDER BY e.e_Date DESC
+                        LIMIT 6";
                 $result = $conn->query($sql);
 
                 if ($result && $result->num_rows > 0):
