@@ -13,7 +13,7 @@ if (!empty($search_value)) {
             $where_clause .= " AND e.e_name LIKE '%" . $conn->real_escape_string($search_value) . "%'";
             break;
         case 'date':
-            $where_clause .= " AND e.e_Date LIKE '%" . $conn->real_escape_string($search_value) . "%'";
+            $where_clause .= " AND (e.e_start LIKE '%" . $conn->real_escape_string($search_value) . "%' OR e.e_end LIKE '%" . $conn->real_escape_string($search_value) . "%')";
             break;
         case 'curator':
             $where_clause .= " AND p.name LIKE '%" . $conn->real_escape_string($search_value) . "%'";
@@ -22,14 +22,14 @@ if (!empty($search_value)) {
 }
 
 // 查詢展覽
-$sql = "SELECT e.e_name, e.e_Date, p.name as curator_name,
+$sql = "SELECT e.e_name, e.e_start, e.e_end, e.theme, p.name as curator_name,
         (SELECT COUNT(*) FROM exhibit WHERE e_name = e.e_name) as artifact_count,
         (SELECT COUNT(*) FROM visit WHERE e_name = e.e_name) as visitor_count
         FROM exhibition e
         LEFT JOIN curator c ON e.id = c.id
         LEFT JOIN person p ON c.id = p.id
         $where_clause
-        ORDER BY e.e_Date DESC";
+        ORDER BY e.e_start DESC";
 $exhibitions = $conn->query($sql);
 
 // 總展覽數
@@ -128,7 +128,8 @@ $total_exhibitions = $conn->query($total_sql)->fetch_assoc()['total'];
                             </div>
                             <div class="exhibition-content">
                                 <h3 class="exhibition-title"><?php echo htmlspecialchars($ex['e_name']); ?></h3>
-                                <p class="exhibition-date">📅 <?php echo date('Y年m月d日', strtotime($ex['e_Date'])); ?></p>
+                                <p class="exhibition-date">📅 <?php echo date('Y/m/d', strtotime($ex['e_start'])); ?> ~ <?php echo date('Y/m/d', strtotime($ex['e_end'])); ?></p>
+                                <p style="color: #5c4a32; font-size: 0.9rem; margin-bottom: 0.5rem;">🎯 <?php echo htmlspecialchars($ex['theme']); ?></p>
                                 <p class="exhibition-curator">👤 策展人: <?php echo htmlspecialchars($ex['curator_name']); ?></p>
                                 <p style="color: #999; font-size: 0.9rem;">🎨 藝術品: <?php echo $ex['artifact_count']; ?> 件</p>
                                 <p style="color: #999; font-size: 0.9rem;">👥 參觀人數: <?php echo $ex['visitor_count']; ?> 人</p>

@@ -9,7 +9,7 @@ if (empty($exhibition_name)) {
 }
 
 // 查詢展覽資訊
-$sql = "SELECT e.e_name, e.e_Date, e.id as curator_id, p.name as curator_name, p.phone, p.mail
+$sql = "SELECT e.e_name, e.e_start, e.e_end, e.theme, p.name as curator_name, p.id as curator_id, p.phone, p.mail
         FROM exhibition e
         LEFT JOIN curator c ON e.id = c.id
         LEFT JOIN person p ON c.id = p.id
@@ -92,7 +92,8 @@ $guides = $stmt->get_result();
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
                 <div>
                     <h3 style="color: #5c4a32; margin-bottom: 1rem;">展覽資訊</h3>
-                    <p><strong>展覽日期：</strong> <?php echo date('Y年m月d日', strtotime($exhibition['e_Date'])); ?></p>
+                    <p><strong>展覽日期：</strong> <?php echo date('Y/m/d', strtotime($exhibition['e_start'])); ?> ~ <?php echo date('Y/m/d', strtotime($exhibition['e_end'])); ?></p>
+                    <p><strong>展覽主題：</strong> <?php echo htmlspecialchars($exhibition['theme']); ?></p>
                     <p><strong>策展人：</strong> <?php echo htmlspecialchars($exhibition['curator_name']); ?></p>
                     <p><strong>聯絡電話：</strong> <?php echo htmlspecialchars($exhibition['phone']); ?></p>
                     <p><strong>電子郵件：</strong> <?php echo htmlspecialchars($exhibition['mail']); ?></p>

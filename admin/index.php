@@ -23,17 +23,17 @@ $sql = "SELECT COUNT(*) as count FROM ticket";
 $ticket_count = $conn->query($sql)->fetch_assoc()['count'];
 
 // 最新展覽
-$sql = "SELECT e.e_name, e.e_Date, p.name as curator_name,
+$sql = "SELECT e.e_name, e.e_start, e.e_end, e.theme, p.name as curator_name,
         (SELECT COUNT(*) FROM exhibit WHERE e_name = e.e_name) as artifact_count
         FROM exhibition e
         LEFT JOIN curator c ON e.id = c.id
         LEFT JOIN person p ON c.id = p.id
-        ORDER BY e.e_Date DESC
+        ORDER BY e.e_start DESC
         LIMIT 5";
 $recent_exhibitions = $conn->query($sql);
 
 // 最新購票
-$sql = "SELECT t.t_id, t.price, p.name
+$sql = "SELECT t.t_id, t.type, t.price, p.name
         FROM ticket t
         LEFT JOIN person p ON t.id = p.id
         ORDER BY t.t_id DESC
@@ -124,6 +124,7 @@ $recent_tickets = $conn->query($sql);
                         <tr>
                             <th>展覽名稱</th>
                             <th>展覽日期</th>
+                            <th>主題</th>
                             <th>策展人</th>
                             <th>藝術品數</th>
                             <th>操作</th>
@@ -133,7 +134,8 @@ $recent_tickets = $conn->query($sql);
                         <?php while($ex = $recent_exhibitions->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($ex['e_name']); ?></td>
-                                <td><?php echo date('Y-m-d', strtotime($ex['e_Date'])); ?></td>
+                                <td><?php echo date('Y-m-d', strtotime($ex['e_start'])); ?> ~ <?php echo date('Y-m-d', strtotime($ex['e_end'])); ?></td>
+                                <td><?php echo htmlspecialchars($ex['theme']); ?></td>
                                 <td><?php echo htmlspecialchars($ex['curator_name']); ?></td>
                                 <td><?php echo $ex['artifact_count']; ?> 件</td>
                                 <td>
@@ -157,6 +159,7 @@ $recent_tickets = $conn->query($sql);
                         <tr>
                             <th>票券編號</th>
                             <th>購買人</th>
+                            <th>票種</th>
                             <th>票價</th>
                         </tr>
                     </thead>
@@ -165,6 +168,7 @@ $recent_tickets = $conn->query($sql);
                             <tr>
                                 <td><?php echo htmlspecialchars($ticket['t_id']); ?></td>
                                 <td><?php echo htmlspecialchars($ticket['name']); ?></td>
+                                <td><?php echo htmlspecialchars($ticket['type'] ?: '未指定'); ?></td>
                                 <td><strong>NT$ <?php echo $ticket['price']; ?></strong></td>
                             </tr>
                         <?php endwhile; ?>

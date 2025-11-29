@@ -40,10 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_feedback'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_feedback'])) {
     $fb_id = $_POST['fb_id'];
     $new_content = trim($_POST['new_content']);
+    $new_anony = isset($_POST['update_anony']) ? 1 : 0;
     if (!empty($new_content)) {
-        $sql = "UPDATE feedback SET content = ? WHERE fb_id = ? AND id = ?";
+        $sql = "UPDATE feedback SET content = ?, anony = ? WHERE fb_id = ? AND id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $new_content, $fb_id, $_SESSION['user_id']);
+        $stmt->bind_param("siss", $new_content, $new_anony, $fb_id, $_SESSION['user_id']);
         if ($stmt->execute()) {
             $message = '<div class="alert alert-success">回饋已更新！</div>';
         } else {
@@ -85,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_profile'])) {
 }
 
 // 查詢購票記錄
-$sql = "SELECT t.t_id, t.price
+$sql = "SELECT t.t_id, t.type, t.price
         FROM ticket t
         WHERE t.id = ?
         ORDER BY t.t_id DESC";
@@ -95,23 +96,23 @@ $stmt->execute();
 $tickets = $stmt->get_result();
 
 // 查詢參觀記錄
-$sql = "SELECT v.e_name, e.e_Date, p.name as curator_name
+$sql = "SELECT v.e_name, e.e_start, e.e_end, e.theme, p.name as curator_name
         FROM visit v
         LEFT JOIN exhibition e ON v.e_name = e.e_name
         LEFT JOIN curator c ON e.id = c.id
         LEFT JOIN person p ON c.id = p.id
         WHERE v.id = ?
-        ORDER BY e.e_Date DESC";
+        ORDER BY e.e_start DESC";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['user_id']);
 $stmt->execute();
 $visits = $stmt->get_result();
 
 // 查詢我的回饋
-$sql = "SELECT f.fb_id, f.content
+$sql = "SELECT f.fb_id, f.content, f.fb_d, f.anony
         FROM feedback f
         WHERE f.id = ? AND f.fb_id NOT LIKE 'PWD_%'
-        ORDER BY f.fb_id DESC";
+        ORDER BY f.fb_d DESC, f.fb_id DESC";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['user_id']);
 $stmt->execute();
@@ -216,7 +217,9 @@ $feedbacks = $stmt->get_result();
 
                     <div class="form-group">
                         <label>會員編號</label>
-                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($user['id']); ?>" readonly>
+                        <div style="padding: 0.75rem; background: #f5f0e8; border: 1px solid #d4c4a8; border-radius: 3px; color: #5c4a32;">
+                            <?php echo htmlspecialchars($user['id']); ?>
+                        </div>
                     </div>
                 </div>
 
@@ -235,6 +238,7 @@ $feedbacks = $stmt->get_result();
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div>
                                     <div style="font-weight: bold; color: #5c4a32;">票券編號: <?php echo htmlspecialchars($ticket['t_id']); ?></div>
+                                    <div style="color: #7a6a5a; margin-top: 0.3rem;">🎟️ 票種: <?php echo htmlspecialchars($ticket['type'] ?: '未指定'); ?></div>
                                     <div style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>NT$ <?php echo $ticket['price']; ?></strong></div>
                                 </div>
                                 <form method="POST" onsubmit="return confirmDelete('票券', '<?php echo $ticket['t_id']; ?>');">
@@ -259,7 +263,8 @@ $feedbacks = $stmt->get_result();
                     <?php while($visit = $visits->fetch_assoc()): ?>
                         <div style="background: #f5f0e8; padding: 1rem; border-radius: 3px; border-left: 4px solid #8b7355;">
                             <h3 style="color: #5c4a32; margin-bottom: 0.5rem;"><?php echo htmlspecialchars($visit['e_name']); ?></h3>
-                            <p style="color: #7a6a5a; margin: 0;">📅 <?php echo date('Y年m月d日', strtotime($visit['e_Date'])); ?></p>
+                            <p style="color: #7a6a5a; margin: 0 0 0.3rem 0;">📅 <?php echo date('Y/m/d', strtotime($visit['e_start'])); ?> ~ <?php echo date('Y/m/d', strtotime($visit['e_end'])); ?></p>
+                            <p style="color: #7a6a5a; margin: 0 0 0.3rem 0;">🎯 主題: <?php echo htmlspecialchars($visit['theme']); ?></p>
                             <p style="color: #7a6a5a; margin: 0;">👤 策展人: <?php echo htmlspecialchars($visit['curator_name']); ?></p>
                         </div>
                     <?php endwhile; ?>
@@ -278,7 +283,12 @@ $feedbacks = $stmt->get_result();
                     <div style="background: #f5f0e8; padding: 1rem; border-radius: 3px; margin-bottom: 1rem; border-left: 4px solid #8b7355;">
                         <div style="display: flex; justify-content: space-between; align-items: start;">
                             <div style="flex: 1;">
-                                <div style="color: #999; font-size: 0.9rem; margin-bottom: 0.5rem;">編號: <?php echo htmlspecialchars($feedback['fb_id']); ?></div>
+                                <div style="color: #999; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                    📅 <?php echo $feedback['fb_d'] ? date('Y/m/d', strtotime($feedback['fb_d'])) : '未知日期'; ?>
+                                    <?php if ($feedback['anony']): ?>
+                                        <span style="margin-left: 0.5rem; color: #a08060;">(😶 匿名提交)</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p style="color: #333; margin: 0;"><?php echo nl2br(htmlspecialchars($feedback['content'])); ?></p>
                             </div>
                             <div class="action-buttons">
@@ -296,6 +306,12 @@ $feedbacks = $stmt->get_result();
                                 <div class="form-group">
                                     <label>修改回饋內容</label>
                                     <textarea name="new_content" class="form-control" rows="4" required><?php echo htmlspecialchars($feedback['content']); ?></textarea>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1rem;">
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="checkbox" name="update_anony" value="1" style="margin-right: 0.5rem; width: auto;" <?php echo $feedback['anony'] ? 'checked' : ''; ?>>
+                                        <span>😶 匿名提交（不顯示您的姓名）</span>
+                                    </label>
                                 </div>
                                 <button type="submit" name="update_feedback" class="btn btn-success">確認修改</button>
                                 <button type="button" onclick="toggleEdit('feedback-<?php echo $feedback['fb_id']; ?>')" class="btn">取消</button>

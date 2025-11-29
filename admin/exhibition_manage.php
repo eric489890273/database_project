@@ -11,10 +11,12 @@ $message = '';
 // 處理新增展覽
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_exhibition'])) {
     $e_name = trim($_POST['e_name']);
-    $e_date = $_POST['e_date'];
+    $e_start = $_POST['e_start'];
+    $e_end = $_POST['e_end'];
+    $theme = trim($_POST['theme']);
     $curator_id = $_SESSION['user_id'];
 
-    if (!empty($e_name) && !empty($e_date)) {
+    if (!empty($e_name) && !empty($e_start) && !empty($e_end) && !empty($theme)) {
         // 檢查展覽是否已存在
         $sql = "SELECT * FROM exhibition WHERE e_name = ?";
         $stmt = $conn->prepare($sql);
@@ -25,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_exhibition'])) {
         if ($result->num_rows > 0) {
             $message = '<div class="alert alert-danger">展覽名稱已存在!</div>';
         } else {
-            $sql = "INSERT INTO exhibition (e_name, e_Date, id) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO exhibition (e_name, e_start, e_end, theme, id) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $e_name, $e_date, $curator_id);
+            $stmt->bind_param("sssss", $e_name, $e_start, $e_end, $theme, $curator_id);
 
             if ($stmt->execute()) {
                 $message = '<div class="alert alert-success">展覽新增成功!</div>';
@@ -67,7 +69,7 @@ if (!empty($search_value)) {
             $where_clause .= " AND e.e_name LIKE '%" . $conn->real_escape_string($search_value) . "%'";
             break;
         case 'date':
-            $where_clause .= " AND e.e_Date LIKE '%" . $conn->real_escape_string($search_value) . "%'";
+            $where_clause .= " AND (e.e_start LIKE '%" . $conn->real_escape_string($search_value) . "%' OR e.e_end LIKE '%" . $conn->real_escape_string($search_value) . "%')";
             break;
         case 'curator':
             $where_clause .= " AND p.name LIKE '%" . $conn->real_escape_string($search_value) . "%'";
@@ -76,14 +78,14 @@ if (!empty($search_value)) {
 }
 
 // 查詢展覽
-$sql = "SELECT e.e_name, e.e_Date, e.id, p.name as curator_name,
+$sql = "SELECT e.e_name, e.e_start, e.e_end, e.theme, e.id, p.name as curator_name,
         (SELECT COUNT(*) FROM exhibit WHERE e_name = e.e_name) as artifact_count,
         (SELECT COUNT(*) FROM visit WHERE e_name = e.e_name) as visitor_count
         FROM exhibition e
         LEFT JOIN curator c ON e.id = c.id
         LEFT JOIN person p ON c.id = p.id
         $where_clause
-        ORDER BY e.e_Date DESC";
+        ORDER BY e.e_start DESC";
 $exhibitions = $conn->query($sql);
 
 // 總展覽數
@@ -195,14 +197,22 @@ $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p 
             <div id="add-form" class="edit-form">
                 <h3 style="color: #5c4a32; margin-bottom: 1rem;">新增展覽</h3>
                 <form method="POST">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
                         <div class="form-group">
                             <label>展覽名稱 *</label>
                             <input type="text" name="e_name" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>展覽日期 *</label>
-                            <input type="date" name="e_date" class="form-control" required>
+                            <label>開始日期 *</label>
+                            <input type="date" name="e_start" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>結束日期 *</label>
+                            <input type="date" name="e_end" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>展覽主題 *</label>
+                            <input type="text" name="theme" class="form-control" placeholder="例如：經典油畫、印象派、近代雕塑..." required>
                         </div>
                     </div>
                     <div style="margin-top: 1rem;">
@@ -228,12 +238,13 @@ $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p 
                     <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
                         <!-- 表頭 -->
                         <div style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; padding: 0.75rem;">
-                            <div style="display: grid; grid-template-columns: 200px 100px 120px 90px 90px 140px; gap: 0.5rem; font-weight: bold; font-size: 0.9rem;">
+                            <div style="display: grid; grid-template-columns: 180px 160px 120px 120px 80px 80px 140px; gap: 0.5rem; font-weight: bold; font-size: 0.9rem;">
                                 <div>展覽名稱</div>
                                 <div>展覽日期</div>
+                                <div>主題</div>
                                 <div>策展人</div>
-                                <div>藝術品數</div>
-                                <div>參觀人數</div>
+                                <div>藝術品</div>
+                                <div>參觀人</div>
                                 <div>操作</div>
                             </div>
                         </div>
@@ -243,11 +254,14 @@ $curators = $conn->query("SELECT c.id, p.name FROM curator c LEFT JOIN person p 
                             <?php while($ex = $exhibitions->fetch_assoc()): ?>
                                 <div style="border-bottom: 1px solid #eee; background: #fff;">
                                     <div style="padding: 0.75rem;">
-                                        <div style="display: grid; grid-template-columns: 200px 100px 120px 90px 90px 140px; gap: 0.5rem; align-items: center; font-size: 0.9rem;">
+                                        <div style="display: grid; grid-template-columns: 180px 160px 120px 120px 80px 80px 140px; gap: 0.5rem; align-items: center; font-size: 0.9rem;">
                                             <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?php echo htmlspecialchars($ex['e_name']); ?>">
                                                 <strong><?php echo htmlspecialchars($ex['e_name']); ?></strong>
                                             </div>
-                                            <div><?php echo date('Y-m-d', strtotime($ex['e_Date'])); ?></div>
+                                            <div><?php echo date('m/d', strtotime($ex['e_start'])); ?> ~ <?php echo date('m/d', strtotime($ex['e_end'])); ?></div>
+                                            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?php echo htmlspecialchars($ex['theme']); ?>">
+                                                <?php echo htmlspecialchars($ex['theme']); ?>
+                                            </div>
                                             <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?php echo htmlspecialchars($ex['curator_name']); ?>">
                                                 <?php echo htmlspecialchars($ex['curator_name']); ?>
                                             </div>

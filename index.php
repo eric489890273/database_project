@@ -47,12 +47,12 @@ require_once 'config.php';
             <h2 class="card-title">🎨 最新展覽</h2>
             <div class="exhibition-grid">
                 <?php
-                $sql = "SELECT e.e_name, e.e_Date, p.name as curator_name,
+                $sql = "SELECT e.e_name, e.e_start, e.e_end, e.theme, p.name as curator_name,
                         (SELECT COUNT(*) FROM exhibit WHERE e_name = e.e_name) as artifact_count
                         FROM exhibition e
                         LEFT JOIN curator c ON e.id = c.id
                         LEFT JOIN person p ON c.id = p.id
-                        ORDER BY e.e_Date DESC
+                        ORDER BY e.e_start DESC
                         LIMIT 6";
                 $result = $conn->query($sql);
 
@@ -65,7 +65,8 @@ require_once 'config.php';
                         </div>
                         <div class="exhibition-content">
                             <h3 class="exhibition-title"><?php echo htmlspecialchars($row['e_name']); ?></h3>
-                            <p class="exhibition-date">📅 <?php echo date('Y年m月d日', strtotime($row['e_Date'])); ?></p>
+                            <p class="exhibition-date">📅 <?php echo date('Y/m/d', strtotime($row['e_start'])); ?> ~ <?php echo date('Y/m/d', strtotime($row['e_end'])); ?></p>
+                            <p style="color: #5c4a32; font-size: 0.9rem; margin-bottom: 0.5rem;">🎯 <?php echo htmlspecialchars($row['theme']); ?></p>
                             <p class="exhibition-curator">👤 策展人: <?php echo htmlspecialchars($row['curator_name']); ?></p>
                             <p style="color: #999; font-size: 0.9rem;">🎨 藝術品數量: <?php echo $row['artifact_count']; ?> 件</p>
                             <div style="margin-top: 1rem;">
@@ -132,10 +133,10 @@ require_once 'config.php';
                 $result = $conn->query($sql);
                 $visitor_count = $result->fetch_assoc()['count'];
 
-                // 統計今日展覽
-                $sql = "SELECT COUNT(*) as count FROM exhibition WHERE e_Date = CURDATE()";
+                // 統計進行中展覽
+                $sql = "SELECT COUNT(*) as count FROM exhibition WHERE CURDATE() BETWEEN e_start AND e_end";
                 $result = $conn->query($sql);
-                $today_exhibition = $result->fetch_assoc()['count'];
+                $ongoing_exhibition = $result->fetch_assoc()['count'];
                 ?>
 
                 <div style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; padding: 1.5rem; border-radius: 3px; text-align: center; border: 1px solid #8b7355;">
@@ -151,8 +152,8 @@ require_once 'config.php';
                     <div>位會員</div>
                 </div>
                 <div style="background: linear-gradient(135deg, #6a5a4a 0%, #9a8a7a 100%); color: #f5f0e8; padding: 1.5rem; border-radius: 3px; text-align: center; border: 1px solid #9a8a7a;">
-                    <div style="font-size: 2.5rem; font-weight: bold;"><?php echo $today_exhibition; ?></div>
-                    <div>今日展覽</div>
+                    <div style="font-size: 2.5rem; font-weight: bold;"><?php echo $ongoing_exhibition; ?></div>
+                    <div>進行中展覽</div>
                 </div>
             </div>
         </div>

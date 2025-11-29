@@ -25,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_artifact'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_artifact'])) {
     $art_id = $_POST['art_id'];
     $art_name = trim($_POST['art_name']);
+    $art_des = trim($_POST['art_des']);
+    $art_date = trim($_POST['art_date']);
     $e_name = $_POST['e_name'];
     $creator_type = $_POST['creator_type'];
 
@@ -32,10 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_artifact'])) {
         $conn->begin_transaction();
 
         try {
-            // 更新藝術品名稱
-            $sql = "UPDATE artifact SET art_name = ? WHERE art_id = ?";
+            // 更新藝術品名稱、描述、創作時間
+            $sql = "UPDATE artifact SET art_name = ?, art_des = ?, art_date = ? WHERE art_id = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $art_name, $art_id);
+            $stmt->bind_param("ssss", $art_name, $art_des, $art_date, $art_id);
             $stmt->execute();
 
             // 更新 exhibit 表（先刪除舊的，再插入新的）
@@ -109,6 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_artifact'])) {
 // 處理新增藝術品
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_artifact'])) {
     $art_name = trim($_POST['art_name']);
+    $art_des = trim($_POST['art_des']);
+    $art_date = trim($_POST['art_date']);
     $e_name = $_POST['e_name'];
     $creator_type = $_POST['creator_type'];
 
@@ -119,9 +123,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_artifact'])) {
 
         try {
             // 插入藝術品
-            $sql = "INSERT INTO artifact (art_id, art_name) VALUES (?, ?)";
+            $sql = "INSERT INTO artifact (art_id, art_name, art_des, art_date) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $art_id, $art_name);
+            $stmt->bind_param("ssss", $art_id, $art_name, $art_des, $art_date);
             $stmt->execute();
 
             // 插入展出關聯
@@ -203,7 +207,7 @@ if (!empty($search_value)) {
 }
 
 // 查詢藝術品
-$sql = "SELECT a.art_id, a.art_name, ex.e_name, e.e_Date,
+$sql = "SELECT a.art_id, a.art_name, a.art_des, a.art_date, ex.e_name, e.e_start,
         GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') as creators
         FROM artifact a
         LEFT JOIN exhibit ex ON a.art_id = ex.art_id
@@ -212,7 +216,7 @@ $sql = "SELECT a.art_id, a.art_name, ex.e_name, e.e_Date,
         LEFT JOIN creator cr ON c.id = cr.id
         LEFT JOIN person p ON cr.id = p.id
         $where_clause
-        GROUP BY a.art_id, a.art_name, ex.e_name, e.e_Date
+        GROUP BY a.art_id, a.art_name, a.art_des, a.art_date, ex.e_name, e.e_start
         ORDER BY a.art_id DESC";
 $artifacts = $conn->query($sql);
 
@@ -221,7 +225,7 @@ $total_sql = "SELECT COUNT(*) as total FROM artifact";
 $total_artifacts = $conn->query($total_sql)->fetch_assoc()['total'];
 
 // 查詢所有展覽
-$exhibitions = $conn->query("SELECT e_name FROM exhibition ORDER BY e_Date DESC");
+$exhibitions = $conn->query("SELECT e_name FROM exhibition ORDER BY e_start DESC");
 
 // 查詢所有創作者
 $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p ON c.id = p.id ORDER BY p.name");
@@ -359,10 +363,14 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
             <div id="add-form" class="edit-form" style="margin-bottom: 1.5rem;">
                 <h3 style="color: #5c4a32; margin-bottom: 1rem;">新增藝術品</h3>
                 <form method="POST">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
                         <div class="form-group">
                             <label>藝術品名稱 *</label>
                             <input type="text" name="art_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>創作時間</label>
+                            <input type="text" name="art_date" class="form-control" placeholder="例如：1889年、唐代、19世紀末...">
                         </div>
                         <div class="form-group">
                             <label>所屬展覽 *</label>
@@ -375,6 +383,10 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
                                 <?php endwhile; ?>
                             </select>
                         </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label>藝術品描述</label>
+                        <textarea name="art_des" class="form-control" rows="3" placeholder="請輸入藝術品的簡要描述..."></textarea>
                     </div>
 
                     <div class="form-group" style="margin-top: 1rem;">
@@ -457,11 +469,11 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
                     <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
                         <!-- 表頭 -->
                         <div style="background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); color: #f5f0e8; padding: 0.75rem;">
-                            <div style="display: grid; grid-template-columns: 80px 200px 180px 100px 180px 140px; gap: 0.5rem; font-weight: bold; font-size: 0.9rem;">
+                            <div style="display: grid; grid-template-columns: 80px 160px 100px 160px 150px 140px; gap: 0.5rem; font-weight: bold; font-size: 0.9rem;">
                                 <div>編號</div>
                                 <div>藝術品名稱</div>
+                                <div>創作時間</div>
                                 <div>所屬展覽</div>
-                                <div>展覽日期</div>
                                 <div>創作者</div>
                                 <div>操作</div>
                             </div>
@@ -472,11 +484,11 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
                             <?php while($art = $artifacts->fetch_assoc()): ?>
                                 <div style="border-bottom: 1px solid #eee; background: #fff;">
                                     <div style="padding: 0.75rem;">
-                                        <div style="display: grid; grid-template-columns: 80px 200px 180px 100px 180px 140px; gap: 0.5rem; align-items: center; font-size: 0.9rem;">
+                                        <div style="display: grid; grid-template-columns: 80px 160px 100px 160px 150px 140px; gap: 0.5rem; align-items: center; font-size: 0.9rem;">
                                             <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo htmlspecialchars($art['art_id']); ?></div>
-                                            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><strong><?php echo htmlspecialchars($art['art_name']); ?></strong></div>
+                                            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?php echo htmlspecialchars($art['art_name']); ?>"><strong><?php echo htmlspecialchars($art['art_name']); ?></strong></div>
+                                            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo htmlspecialchars($art['art_date'] ?? '-'); ?></div>
                                             <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?php echo htmlspecialchars($art['e_name']); ?>"><?php echo htmlspecialchars($art['e_name']); ?></div>
-                                            <div><?php echo date('Y-m-d', strtotime($art['e_Date'])); ?></div>
                                             <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?php echo htmlspecialchars($art['creators'] ?? '未知'); ?>"><?php echo htmlspecialchars($art['creators'] ?? '未知'); ?></div>
                                             <div class="action-buttons">
                                                 <button onclick="toggleEdit('<?php echo $art['art_id']; ?>')" class="btn btn-primary btn-small">修改</button>
@@ -492,7 +504,7 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
                                             <form method="POST">
                                                 <input type="hidden" name="art_id" value="<?php echo $art['art_id']; ?>">
                                                 <h4 style="color: #5c4a32; margin-bottom: 1rem;">修改藝術品資料</h4>
-                                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                                                     <div class="form-group">
                                                         <label>藝術品編號</label>
                                                         <input type="text" class="form-control" value="<?php echo htmlspecialchars($art['art_id']); ?>" readonly>
@@ -500,6 +512,10 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
                                                     <div class="form-group">
                                                         <label>藝術品名稱 *</label>
                                                         <input type="text" name="art_name" class="form-control" value="<?php echo htmlspecialchars($art['art_name']); ?>" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>創作時間</label>
+                                                        <input type="text" name="art_date" class="form-control" value="<?php echo htmlspecialchars($art['art_date'] ?? ''); ?>" placeholder="例如：1889年、唐代...">
                                                     </div>
                                                     <div class="form-group">
                                                         <label>所屬展覽 *</label>
@@ -514,6 +530,10 @@ $creators = $conn->query("SELECT p.id, p.name FROM creator c LEFT JOIN person p 
                                                             <?php endwhile; ?>
                                                         </select>
                                                     </div>
+                                                </div>
+                                                <div class="form-group" style="margin-top: 1rem;">
+                                                    <label>藝術品描述</label>
+                                                    <textarea name="art_des" class="form-control" rows="3" placeholder="請輸入藝術品的簡要描述..."><?php echo htmlspecialchars($art['art_des'] ?? ''); ?></textarea>
                                                 </div>
 
                                                 <div class="form-group" style="margin-top: 1rem;">

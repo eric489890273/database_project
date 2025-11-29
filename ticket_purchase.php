@@ -11,19 +11,20 @@ $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price = intval($_POST['price']);
+    $ticket_type = $_POST['ticket_type'];
 
-    if ($price >= 0) {
+    if ($price >= 0 && !empty($ticket_type)) {
         $user_id = $_SESSION['user_id'];
         $ticket_id = generateID('T', 'ticket', 't_id');
 
         try {
             // 插入票券
-            $sql = "INSERT INTO ticket (t_id, price, id) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO ticket (t_id, type, price, id) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sis", $ticket_id, $price, $user_id);
+            $stmt->bind_param("ssis", $ticket_id, $ticket_type, $price, $user_id);
             $stmt->execute();
 
-            $message = '<div class="alert alert-success">購票成功！票券編號：' . $ticket_id . '，金額：NT$ ' . $price . '</div>';
+            $message = '<div class="alert alert-success">購票成功！票券編號：' . $ticket_id . '，票種：' . $ticket_type . '，金額：NT$ ' . $price . '</div>';
 
         } catch (Exception $e) {
             $message = '<div class="alert alert-danger">購票失敗：' . $e->getMessage() . '</div>';
@@ -67,17 +68,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form method="POST" action="">
                 <div class="form-group">
                     <label for="price">選擇票種 *</label>
-                    <select id="price" name="price" class="form-control" required>
+                    <select id="price" name="price" class="form-control" required onchange="updateTicketType()">
                         <option value="">請選擇票種</option>
-                        <option value="300">全票 - NT$ 300</option>
-                        <option value="150">學生票 - NT$ 150</option>
-                        <option value="200">優待票 - NT$ 200</option>
-                        <option value="0">免費票 - NT$ 0</option>
+                        <option value="300" data-type="全票">全票 - NT$ 300</option>
+                        <option value="150" data-type="學生票">學生票 - NT$ 150</option>
+                        <option value="200" data-type="優待票">優待票 - NT$ 200</option>
+                        <option value="0" data-type="免費票">免費票 - NT$ 0</option>
                     </select>
+                    <input type="hidden" id="ticket_type" name="ticket_type" value="">
                 </div>
 
                 <button type="submit" class="btn btn-success" style="width: 100%;">確認購買</button>
             </form>
+
+            <script>
+            function updateTicketType() {
+                var select = document.getElementById('price');
+                var ticketType = document.getElementById('ticket_type');
+                var selectedOption = select.options[select.selectedIndex];
+                ticketType.value = selectedOption.getAttribute('data-type') || '';
+            }
+            </script>
 
             <div style="margin-top: 2rem; padding: 1rem; background: #f5f0e8; border-radius: 3px; border: 1px solid #d4c4a8;">
                 <h3 style="color: #5c4a32; margin-bottom: 1rem;">📋 購票說明</h3>

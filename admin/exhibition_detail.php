@@ -17,10 +17,12 @@ if (empty($e_name)) {
 // 處理修改展覽
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_exhibition'])) {
     $new_e_name = trim($_POST['e_name']);
-    $new_e_date = $_POST['e_date'];
+    $new_e_start = $_POST['e_start'];
+    $new_e_end = $_POST['e_end'];
+    $new_theme = trim($_POST['theme']);
     $new_curator_id = $_POST['curator_id'];
 
-    if (!empty($new_e_name) && !empty($new_e_date) && !empty($new_curator_id)) {
+    if (!empty($new_e_name) && !empty($new_e_start) && !empty($new_e_end) && !empty($new_theme) && !empty($new_curator_id)) {
         $conn->begin_transaction();
 
         try {
@@ -55,9 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_exhibition'])) 
             }
 
             // 更新展覽資訊
-            $sql = "UPDATE exhibition SET e_name = ?, e_Date = ?, id = ? WHERE e_name = ?";
+            $sql = "UPDATE exhibition SET e_name = ?, e_start = ?, e_end = ?, theme = ?, id = ? WHERE e_name = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssss", $new_e_name, $new_e_date, $new_curator_id, $e_name);
+            $stmt->bind_param("ssssss", $new_e_name, $new_e_start, $new_e_end, $new_theme, $new_curator_id, $e_name);
             $stmt->execute();
 
             $conn->commit();
@@ -74,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_exhibition'])) 
 }
 
 // 查詢展覽詳細資訊
-$sql = "SELECT e.e_name, e.e_Date, e.id, p.name as curator_name, p.phone, p.mail
+$sql = "SELECT e.e_name, e.e_start, e.e_end, e.theme, e.id, p.name as curator_name, p.phone, p.mail
         FROM exhibition e
         LEFT JOIN curator c ON e.id = c.id
         LEFT JOIN person p ON c.id = p.id
@@ -90,14 +92,14 @@ if (!$exhibition) {
 }
 
 // 查詢展覽的藝術品
-$sql = "SELECT a.art_id, a.art_name, GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') as creators
+$sql = "SELECT a.art_id, a.art_name, a.art_des, a.art_date, GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') as creators
         FROM artifact a
         INNER JOIN exhibit ex ON a.art_id = ex.art_id
         LEFT JOIN `create` c ON a.art_id = c.art_id
         LEFT JOIN creator cr ON c.id = cr.id
         LEFT JOIN person p ON cr.id = p.id
         WHERE ex.e_name = ?
-        GROUP BY a.art_id, a.art_name
+        GROUP BY a.art_id, a.art_name, a.art_des, a.art_date
         ORDER BY a.art_id";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $e_name);
@@ -220,7 +222,11 @@ $visit_count = $stmt->get_result()->fetch_assoc()['total'];
                 <div class="info-grid">
                     <div class="info-item">
                         <h4>📅 展覽日期</h4>
-                        <p><?php echo date('Y年m月d日', strtotime($exhibition['e_Date'])); ?></p>
+                        <p><?php echo date('Y/m/d', strtotime($exhibition['e_start'])); ?> ~ <?php echo date('Y/m/d', strtotime($exhibition['e_end'])); ?></p>
+                    </div>
+                    <div class="info-item">
+                        <h4>🎯 展覽主題</h4>
+                        <p><?php echo htmlspecialchars($exhibition['theme']); ?></p>
                     </div>
                     <div class="info-item">
                         <h4>👤 策展人</h4>
@@ -247,8 +253,16 @@ $visit_count = $stmt->get_result()->fetch_assoc()['total'];
                             <input type="text" name="e_name" class="form-control" value="<?php echo htmlspecialchars($exhibition['e_name']); ?>" required>
                         </div>
                         <div class="form-group">
-                            <label>展覽日期 *</label>
-                            <input type="date" name="e_date" class="form-control" value="<?php echo $exhibition['e_Date']; ?>" required>
+                            <label>開始日期 *</label>
+                            <input type="date" name="e_start" class="form-control" value="<?php echo $exhibition['e_start']; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>結束日期 *</label>
+                            <input type="date" name="e_end" class="form-control" value="<?php echo $exhibition['e_end']; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>展覽主題 *</label>
+                            <input type="text" name="theme" class="form-control" value="<?php echo htmlspecialchars($exhibition['theme']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label>策展人 *</label>
@@ -275,9 +289,11 @@ $visit_count = $stmt->get_result()->fetch_assoc()['total'];
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th style="width: 120px;">編號</th>
+                                    <th style="width: 100px;">編號</th>
                                     <th>藝術品名稱</th>
+                                    <th>創作時間</th>
                                     <th>創作者</th>
+                                    <th>描述</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -285,7 +301,11 @@ $visit_count = $stmt->get_result()->fetch_assoc()['total'];
                                     <tr>
                                         <td><?php echo htmlspecialchars($art['art_id']); ?></td>
                                         <td><strong><?php echo htmlspecialchars($art['art_name']); ?></strong></td>
+                                        <td><?php echo htmlspecialchars($art['art_date'] ?? '未知'); ?></td>
                                         <td><?php echo htmlspecialchars($art['creators'] ?? '未知'); ?></td>
+                                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?php echo htmlspecialchars($art['art_des'] ?? ''); ?>">
+                                            <?php echo htmlspecialchars($art['art_des'] ?? '-'); ?>
+                                        </td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>

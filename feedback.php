@@ -10,10 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_feedback']) && 
     if (!empty($content)) {
         $user_id = $_SESSION['user_id'];
         $fb_id = generateID('FB', 'feedback', 'fb_id');
+        $anony = isset($_POST['anonymous']) ? 1 : 0;
 
-        $sql = "INSERT INTO feedback (id, fb_id, content) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO feedback (id, fb_id, content, fb_d, anony) VALUES (?, ?, ?, CURDATE(), ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $user_id, $fb_id, $content);
+        $stmt->bind_param("sssi", $user_id, $fb_id, $content, $anony);
 
         if ($stmt->execute()) {
             $message = '<div class="alert alert-success">感謝您的回饋！我們會持續改進服務品質。</div>';
@@ -26,11 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_feedback']) && 
 }
 
 // 查詢所有網站回饋
-$sql = "SELECT f.content, p.name, f.fb_id, p.id
+$sql = "SELECT f.content, p.name, f.fb_id, p.id, f.fb_d, f.anony
         FROM feedback f
         LEFT JOIN person p ON f.id = p.id
         WHERE f.fb_id NOT LIKE 'PWD_%'
-        ORDER BY f.fb_id DESC";
+        ORDER BY f.fb_d DESC, f.fb_id DESC";
 $feedbacks = $conn->query($sql);
 
 // 統計資訊
@@ -92,6 +93,12 @@ $stats = $conn->query($sql)->fetch_assoc();
                         <textarea id="content" name="content" class="form-control" rows="5" required placeholder="請分享您對本網站的使用體驗、建議或任何想法...&#10;例如：展覽資訊、購票流程、網站介面、服務品質等"></textarea>
                         <small class="form-text">請盡量詳細描述，以便我們更好地改進服務</small>
                     </div>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" name="anonymous" value="1" style="margin-right: 0.5rem; width: auto;">
+                            <span>😶 匿名提交（不顯示您的姓名）</span>
+                        </label>
+                    </div>
                     <button type="submit" name="submit_feedback" class="btn btn-primary">提交回饋</button>
                 </form>
             <?php else: ?>
@@ -129,11 +136,15 @@ $stats = $conn->query($sql)->fetch_assoc();
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                                     <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #5c4a32 0%, #8b7355 100%); display: flex; align-items: center; justify-content: center; color: #f5f0e8; font-weight: bold;">
-                                        <?php echo mb_substr($feedback['name'], 0, 1, 'UTF-8'); ?>
+                                        <?php echo $feedback['anony'] ? '?' : mb_substr($feedback['name'], 0, 1, 'UTF-8'); ?>
                                     </div>
                                     <div>
-                                        <strong style="color: #5c4a32; font-size: 1.1rem;"><?php echo htmlspecialchars($feedback['name']); ?></strong>
-                                        <div style="color: #7a6a5a; font-size: 0.85rem;">編號: <?php echo htmlspecialchars($feedback['fb_id']); ?></div>
+                                        <strong style="color: #5c4a32; font-size: 1.1rem;">
+                                            <?php echo $feedback['anony'] ? '匿名用戶' : htmlspecialchars($feedback['name']); ?>
+                                        </strong>
+                                        <div style="color: #7a6a5a; font-size: 0.85rem;">
+                                            📅 <?php echo $feedback['fb_d'] ? date('Y/m/d', strtotime($feedback['fb_d'])) : '未知日期'; ?>
+                                        </div>
                                     </div>
                                 </div>
                                 <?php if (isLoggedIn() && $_SESSION['user_id'] == $feedback['id']): ?>
